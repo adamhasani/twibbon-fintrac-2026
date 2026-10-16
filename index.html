@@ -10,8 +10,8 @@
   <style>
     :root {
       --bg-dark: #070a14;
-      --card-bg: rgba(16, 23, 42, 0.8);
-      --card-border: rgba(255, 255, 255, 0.1);
+      --card-bg: rgba(16, 23, 42, 0.85);
+      --card-border: rgba(255, 255, 255, 0.12);
       --primary-cyan: #00f2fe;
       --primary-magenta: #f538a0;
       --ig-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
@@ -209,7 +209,7 @@
       gap: 6px;
     }
 
-    /* RIGHT: CONTROLS & CAPTION */
+    /* RIGHT: CONTROLS & FORM */
     .controls-card {
       background: var(--card-bg);
       backdrop-filter: blur(16px);
@@ -225,7 +225,6 @@
       box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
     }
 
-    /* SECTION TABS / HEADERS */
     .section-title {
       font-size: 0.82rem;
       font-weight: 700;
@@ -336,7 +335,6 @@
       text-align: right;
     }
 
-    /* ACTION BUTTONS */
     .actions-row {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -438,7 +436,6 @@
       border-radius: 4px;
     }
 
-    /* COPY CAPTION BUTTON */
     .btn-copy {
       display: flex;
       align-items: center;
@@ -461,7 +458,7 @@
       border-color: var(--primary-cyan);
     }
 
-    /* INSTAGRAM CTA & DOWNLOAD */
+    /* SHARE & DOWNLOAD ACTIONS */
     .share-buttons-container {
       display: flex;
       flex-direction: column;
@@ -483,13 +480,13 @@
       font-size: 0.96rem;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 4px 20px rgba(220, 39, 67, 0.4);
+      box-shadow: 0 4px 20px rgba(220, 39, 67, 0.45);
       transition: all 0.25s ease;
     }
 
     .btn-ig-share:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(220, 39, 67, 0.6);
+      box-shadow: 0 6px 25px rgba(220, 39, 67, 0.65);
     }
 
     .btn-download-hd {
@@ -512,6 +509,183 @@
     .btn-download-hd:hover {
       background: rgba(255, 255, 255, 0.15);
       border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* MODAL PANDUAN INSTAGRAM */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-backdrop.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: #0f172a;
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      border-radius: 20px;
+      padding: 24px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9), var(--glow-cyan);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-backdrop.show .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .modal-icon-ig {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--ig-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 15px rgba(220, 39, 67, 0.5);
+    }
+
+    .modal-header h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .modal-header p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .modal-checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(2, 6, 23, 0.6);
+      border-radius: 12px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.84rem;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+
+    .check-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #10b981;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .check-badge.step {
+      background: var(--primary-cyan);
+      color: #070a14;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-ig-open {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 14px 20px;
+      background: var(--ig-gradient);
+      border: none;
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(220, 39, 67, 0.4);
+      transition: transform 0.2s;
+    }
+
+    .btn-ig-open:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-ig-web {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 11px 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      color: #cbd5e1;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .btn-ig-web:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-modal-close {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-modal-close:hover {
+      color: #fff;
     }
 
     /* FOOTER */
@@ -542,7 +716,7 @@
       gap: 8px;
       opacity: 0;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 100;
+      z-index: 1000;
     }
 
     .toast.show {
@@ -664,8 +838,8 @@
 
       <!-- 4. SHARE & DOWNLOAD -->
       <div class="share-buttons-container">
-        <!-- TOMBOL AUTO SHARE IG -->
-        <button class="btn-ig-share" onclick="shareToInstagram()">
+        <!-- TOMBOL POSTING KE IG -->
+        <button class="btn-ig-share" id="btnShareIg" onclick="handleInstagramShare()">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
           Posting / Bagikan ke Instagram
         </button>
@@ -679,6 +853,45 @@
 
     </div>
 
+  </div>
+
+  <!-- MODAL PANDUAN INSTAGRAM -->
+  <div class="modal-backdrop" id="igModal" onclick="closeIgModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-icon-ig">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </div>
+        <div>
+          <h3>Siap Diposting ke Instagram!</h3>
+          <p>Foto sudah diunduh & caption sudah disalin</p>
+        </div>
+      </div>
+      <div class="modal-checklist">
+        <div class="check-item">
+          <span class="check-badge">✓</span>
+          <span>Foto twibbon HD tersimpan di <b>Galeri / Download</b></span>
+        </div>
+        <div class="check-item">
+          <span class="check-badge">✓</span>
+          <span>Teks caption otomatis <b>tersalin ke clipboard</b></span>
+        </div>
+        <div class="check-item">
+          <span class="check-badge step">3</span>
+          <span>Buka Instagram &rarr; Buat Post / Story &rarr; <b>Paste Caption</b></span>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <a href="instagram://app" class="btn-ig-open" id="btnOpenAppDirect" target="_blank" onclick="trackIgDirect()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          Buka Aplikasi Instagram Sekarang
+        </a>
+        <a href="https://www.instagram.com/" class="btn-ig-web" target="_blank">
+          Buka Instagram Web
+        </a>
+      </div>
+      <button class="btn-modal-close" onclick="closeIgModal()">Tutup Dialog</button>
+    </div>
   </div>
 
   <footer>
@@ -701,6 +914,7 @@
     const fileInput = document.getElementById('fileInput');
     const placeholder = document.getElementById('emptyPlaceholder');
     const toast = document.getElementById('toastMessage');
+    const igModal = document.getElementById('igModal');
 
     const inputNama = document.getElementById('inputNama');
     const inputUniv = document.getElementById('inputUniv');
@@ -734,7 +948,22 @@
     function showToast(msg) {
       toast.innerText = msg;
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
+      setTimeout(() => toast.classList.remove('show'), 3200);
+    }
+
+    function openIgModal() {
+      igModal.classList.add('show');
+    }
+
+    function closeIgModal(e) {
+      igModal.classList.remove('show');
+    }
+
+    function trackIgDirect() {
+      // Jika di HP, link instagram://app membuka app. Tambahkan fallback ke web
+      setTimeout(() => {
+        window.open('https://www.instagram.com/', '_blank');
+      }, 1000);
     }
 
     // CAPTION GENERATOR
@@ -1074,63 +1303,30 @@ More info:
       }
     }
 
-    // SHARE TO INSTAGRAM WORKFLOW
-    async function shareToInstagram() {
+    // INSTAGRAM SHARE HANDLER
+    function handleInstagramShare() {
+      // 1. Cek foto
       if (!userPhoto) {
-        showToast("Upload foto terlebih dahulu!");
+        showToast("⚠️ Silakan upload foto kamu terlebih dahulu!");
         fileInput.click();
         return;
       }
 
-      // 1. Salin caption secara otomatis ke clipboard
+      // 2. Salin caption otomatis
       copyCaption(false);
 
-      // 2. Render & proses gambar
-      render();
-
-      // Cek apakah browser mendukung Web Share API dengan file gambar
-      canvas.toBlob(async (blob) => {
-        if (!blob) {
-          fallbackInstagramFlow();
-          return;
-        }
-
-        const file = new File([blob], 'twibbon-fintrac-2026.png', { type: 'image/png' });
-        const captionText = generateCaptionText();
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          try {
-            await navigator.share({
-              files: [file],
-              title: "I'M READY FOR FINTRAC 2026!",
-              text: captionText
-            });
-            showToast("Caption tersalin & siap diposting ke IG!");
-          } catch (err) {
-            if (err.name !== 'AbortError') {
-              fallbackInstagramFlow();
-            }
-          }
-        } else {
-          fallbackInstagramFlow();
-        }
-      }, 'image/png');
-    }
-
-    function fallbackInstagramFlow() {
-      // Unduh gambar ke HP/laptop
+      // 3. Unduh twibbon HD otomatis
       downloadTwibbon(false);
-      showToast("Caption tersalin & foto diunduh! Membuka Instagram...");
 
-      // Coba buka aplikasi Instagram via deep-link
+      // 4. Buka dialog panduan & coba redirect langsung ke IG app
+      openIgModal();
+      showToast("Foto diunduh & caption disalin! Membuka Instagram...");
+
+      // Mencoba membuka aplikasi Instagram secara langsung (Universal link / deep link)
+      // Di Android/iOS ini akan langsung memicu Instagram
       setTimeout(() => {
-        // Deep-link aplikasi Instagram
-        window.location.href = "instagram://camera";
-        // Fallback jika dibuka di browser PC/laptop
-        setTimeout(() => {
-          window.open("https://www.instagram.com/", "_blank");
-        }, 1200);
-      }, 600);
+        window.location.href = "instagram://app";
+      }, 300);
     }
   </script>
 </body>
