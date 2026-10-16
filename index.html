@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Editor Twibbon FINTRAC 2026 - Financial Trading Competition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #070a14;
+      --card-bg: rgba(16, 23, 42, 0.75);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --primary-cyan: #00f2fe;
+      --primary-magenta: #f538a0;
+      --accent-gold: #ffb703;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --glow-cyan: 0 0 20px rgba(0, 242, 254, 0.35);
+      --glow-magenta: 0 0 20px rgba(245, 56, 160, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(245, 56, 160, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0, 242, 254, 0.12) 0%, transparent 40%),
+        linear-gradient(180deg, #070a14 0%, #0d1322 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 12px 32px;
+    }
+
+    /* HEADER */
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .badge-event {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      background: rgba(0, 242, 254, 0.1);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      border-radius: 999px;
+      color: var(--primary-cyan);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 30%, var(--primary-cyan) 70%, var(--primary-magenta) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.25;
+      margin-bottom: 6px;
+    }
+
+    p.subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* MAIN CONTAINER */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 1050px;
+    }
+
+    @media (min-width: 900px) {
+      .app-container {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 32px;
+      }
+    }
+
+    /* PREVIEW CANVAS WRAPPER */
+    .preview-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      background: #000;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      cursor: grab;
+      touch-action: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .canvas-wrapper:active {
+      cursor: grabbing;
+    }
+
+    #twibbonCanvas {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* EMPTY STATE OVERLAY */
+    .empty-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(7, 10, 20, 0.85);
+      backdrop-filter: blur(4px);
+      padding: 24px;
+      text-align: center;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+    }
+
+    .empty-placeholder.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .upload-icon-pulse {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-cyan), var(--primary-magenta));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      box-shadow: var(--glow-cyan);
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
+      50% { transform: scale(1.08); box-shadow: 0 0 25px rgba(245, 56, 160, 0.6); }
+    }
+
+    .empty-placeholder h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .empty-placeholder p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .canvas-hint {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* CONTROLS PANEL */
+    .controls-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+    }
+
+    /* UPLOAD BUTTON */
+    .btn-upload-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    .btn-upload {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 1.5px dashed rgba(0, 242, 254, 0.5);
+      border-radius: 14px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .btn-upload:hover {
+      border-color: var(--primary-cyan);
+      background: rgba(0, 242, 254, 0.08);
+      transform: translateY(-1px);
+    }
+
+    /* CONTROL GROUPS */
+    .control-group {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .group-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slider-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .slider-btn:hover {
+      background: rgba(0, 242, 254, 0.2);
+      border-color: var(--primary-cyan);
+    }
+
+    input[type="range"] {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: #334155;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary-cyan);
+      box-shadow: 0 0 10px var(--primary-cyan);
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    .val-display {
+      font-size: 0.78rem;
+      color: var(--primary-cyan);
+      font-family: monospace;
+      width: 42px;
+      text-align: right;
+    }
+
+    /* ACTION BUTTONS GRID */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-action:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    /* DOWNLOAD CTA */
+    .btn-download {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, var(--primary-cyan), var(--primary-magenta));
+      border: none;
+      border-radius: 14px;
+      color: #070a14;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: var(--glow-cyan);
+      transition: all 0.25s ease;
+      margin-top: 6px;
+    }
+
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(245, 56, 160, 0.6);
+    }
+
+    .btn-download:active {
+      transform: translateY(0);
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 32px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    footer a {
+      color: var(--primary-cyan);
+      text-decoration: none;
+    }
+
+    /* TOAST NOTIFICATION */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f172a;
+      border: 1px solid var(--primary-cyan);
+      color: #f8fafc;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: var(--glow-cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badge-event">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+      FINTRAC 2026
+    </div>
+    <h1>Twibbon Photo Editor</h1>
+    <p class="subtitle">Pasang fotomu ke dalam frame resmi Financial Trading Competition dengan resolusi tinggi (2048 x 2560 px).</p>
+  </header>
+
+  <div class="app-container">
+    
+    <!-- PREVIEW AREA -->
+    <div class="preview-card">
+      <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="twibbonCanvas" width="2048" height="2560"></canvas>
+        <div class="empty-placeholder" id="emptyPlaceholder">
+          <div class="upload-icon-pulse">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#070a14" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          </div>
+          <h3>Pilih atau Tarik Foto ke Sini</h3>
+          <p>Klik tombol upload untuk memasukkan fotomu</p>
+        </div>
+      </div>
+      <div class="canvas-hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        Geser foto langsung di layar atau cubit untuk zoom
+      </div>
+    </div>
+
+    <!-- CONTROLS AREA -->
+    <div class="controls-card">
+      
+      <!-- UPLOAD -->
+      <div class="btn-upload-wrap">
+        <input type="file" id="fileInput" accept="image/*">
+        <button class="btn-upload" onclick="document.getElementById('fileInput').click()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-cyan)" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          Upload Foto Kamu
+        </button>
+      </div>
+
+      <!-- ZOOM CONTROL -->
+      <div class="control-group">
+        <div class="group-header">
+          <span>Perbesar / Zoom</span>
+          <span class="val-display" id="zoomVal">1.0x</span>
+        </div>
+        <div class="slider-row">
+          <button class="slider-btn" onclick="stepZoom(-0.1)">-</button>
+          <input type="range" id="zoomSlider" min="0.3" max="3.0" step="0.01" value="1.0">
+          <button class="slider-btn" onclick="stepZoom(0.1)">+</button>
+        </div>
+      </div>
+
+      <!-- ROTATION CONTROL -->
+      <div class="control-group">
+        <div class="group-header">
+          <span>Putar / Rotasi</span>
+          <span class="val-display" id="rotVal">0°</span>
+        </div>
+        <div class="slider-row">
+          <button class="slider-btn" onclick="stepRot(-5)">↺</button>
+          <input type="range" id="rotSlider" min="-180" max="180" step="1" value="0">
+          <button class="slider-btn" onclick="stepRot(5)">↻</button>
+        </div>
+      </div>
+
+      <!-- QUICK ACTIONS -->
+      <div class="actions-grid">
+        <button class="btn-action" onclick="flipPhoto()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+          Cermin / Flip
+        </button>
+        <button class="btn-action" onclick="rotate90()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+          Putar 90°
+        </button>
+        <button class="btn-action" onclick="fitToCutout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle></svg>
+          Pusatkan Foto
+        </button>
+        <button class="btn-action" onclick="resetAll()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+          Reset Posisi
+        </button>
+      </div>
+
+      <!-- DOWNLOAD BUTTON -->
+      <button class="btn-download" onclick="downloadTwibbon()">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#070a14" stroke-width="2.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Unduh Twibbon HD
+      </button>
+
+    </div>
+
+  </div>
+
+  <footer>
+    FINTRAC 2026 &bull; Capital Market Study Club (KSPM) Universitas Harkat Negeri
+  </footer>
+
+  <div class="toast" id="toastMessage">Twibbon berhasil diunduh!</div>
+
+  <script>
+    const CANVAS_WIDTH = 2048;
+    const CANVAS_HEIGHT = 2560;
+    // Pusat lubang lingkaran frame FINTRAC 2026
+    const CUTOUT_X = 1010;
+    const CUTOUT_Y = 1316;
+    const CUTOUT_RADIUS = 618;
+
+    const canvas = document.getElementById('twibbonCanvas');
+    const ctx = canvas.getContext('2d');
+    const wrapper = document.getElementById('canvasWrapper');
+    const fileInput = document.getElementById('fileInput');
+    const placeholder = document.getElementById('emptyPlaceholder');
+    const toast = document.getElementById('toastMessage');
+
+    const zoomSlider = document.getElementById('zoomSlider');
+    const zoomVal = document.getElementById('zoomVal');
+    const rotSlider = document.getElementById('rotSlider');
+    const rotVal = document.getElementById('rotVal');
+
+    let frameImage = new Image();
+    frameImage.src = 'frame.png';
+
+    let userPhoto = null;
+    let photoX = CUTOUT_X;
+    let photoY = CUTOUT_Y;
+    let photoScale = 1.0;
+    let photoRotation = 0; // derajat
+    let isFlipped = false;
+
+    // Drag & Touch interaction
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let initialTouchDist = 0;
+    let initialScaleOnPinch = 1.0;
+
+    // Inisialisasi frame
+    frameImage.onload = () => {
+      render();
+    };
+
+    function showToast(msg) {
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // RENDER UTAMA
+    function render() {
+      ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+      // 1. Gambar foto pengguna (jika ada) di bawah frame
+      if (userPhoto) {
+        ctx.save();
+        ctx.translate(photoX, photoY);
+        ctx.rotate((photoRotation * Math.PI) / 180);
+        ctx.scale(photoScale * (isFlipped ? -1 : 1), photoScale);
+        ctx.drawImage(userPhoto, -userPhoto.width / 2, -userPhoto.height / 2);
+        ctx.restore();
+      }
+
+      // 2. Gambar frame overlay transparan di atas foto
+      if (frameImage.complete && frameImage.naturalWidth > 0) {
+        ctx.drawImage(frameImage, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      }
+    }
+
+    // UPLOAD HANDLER
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      loadPhotoFile(file);
+    });
+
+    function loadPhotoFile(file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          userPhoto = img;
+          placeholder.classList.add('hidden');
+          fitToCutout();
+          showToast("Foto berhasil dimuat! Geser untuk atur posisi.");
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // DRAG AND DROP KE WRAPPER
+    wrapper.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      wrapper.style.borderColor = 'var(--primary-cyan)';
+    });
+
+    wrapper.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      wrapper.style.borderColor = 'transparent';
+    });
+
+    wrapper.addEventListener('drop', (e) => {
+      e.preventDefault();
+      wrapper.style.borderColor = 'transparent';
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        loadPhotoFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    // POSISI & SLIDERS
+    function fitToCutout() {
+      if (!userPhoto) return;
+      photoX = CUTOUT_X;
+      photoY = CUTOUT_Y;
+      photoRotation = 0;
+      isFlipped = false;
+
+      // Hitung skala agar pas menutupi lubang lingkaran (diameter ~1236px)
+      const targetSize = CUTOUT_RADIUS * 2.15;
+      const scaleW = targetSize / userPhoto.width;
+      const scaleH = targetSize / userPhoto.height;
+      photoScale = Math.max(scaleW, scaleH);
+
+      syncUI();
+      render();
+    }
+
+    function resetAll() {
+      fitToCutout();
+    }
+
+    function syncUI() {
+      zoomSlider.value = photoScale.toFixed(2);
+      zoomVal.innerText = photoScale.toFixed(2) + 'x';
+      rotSlider.value = Math.round(photoRotation);
+      rotVal.innerText = Math.round(photoRotation) + '°';
+    }
+
+    zoomSlider.addEventListener('input', (e) => {
+      photoScale = parseFloat(e.target.value);
+      zoomVal.innerText = photoScale.toFixed(2) + 'x';
+      render();
+    });
+
+    rotSlider.addEventListener('input', (e) => {
+      photoRotation = parseInt(e.target.value, 10);
+      rotVal.innerText = photoRotation + '°';
+      render();
+    });
+
+    function stepZoom(delta) {
+      photoScale = Math.min(3.0, Math.max(0.3, photoScale + delta));
+      syncUI();
+      render();
+    }
+
+    function stepRot(delta) {
+      let newRot = photoRotation + delta;
+      if (newRot > 180) newRot -= 360;
+      if (newRot < -180) newRot += 360;
+      photoRotation = newRot;
+      syncUI();
+      render();
+    }
+
+    function rotate90() {
+      stepRot(90);
+    }
+
+    function flipPhoto() {
+      isFlipped = !isFlipped;
+      render();
+    }
+
+    // MOUSE DRAG & WHEEL
+    wrapper.addEventListener('mousedown', (e) => {
+      if (!userPhoto) {
+        fileInput.click();
+        return;
+      }
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging || !userPhoto) return;
+      const rect = canvas.getBoundingClientRect();
+      const scaleFactor = CANVAS_WIDTH / rect.width;
+
+      const dx = (e.clientX - startX) * scaleFactor;
+      const dy = (e.clientY - startY) * scaleFactor;
+      photoX += dx;
+      photoY += dy;
+
+      startX = e.clientX;
+      startY = e.clientY;
+      render();
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    wrapper.addEventListener('wheel', (e) => {
+      if (!userPhoto) return;
+      e.preventDefault();
+      const zoomDelta = e.deltaY < 0 ? 0.08 : -0.08;
+      stepZoom(zoomDelta);
+    }, { passive: false });
+
+    // TOUCH SUPPORT (Mobile drag & Pinch zoom)
+    wrapper.addEventListener('touchstart', (e) => {
+      if (!userPhoto) {
+        fileInput.click();
+        return;
+      }
+      if (e.touches.length === 1) {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      } else if (e.touches.length === 2) {
+        isDragging = false;
+        initialTouchDist = getTouchDist(e.touches);
+        initialScaleOnPinch = photoScale;
+      }
+    });
+
+    wrapper.addEventListener('touchmove', (e) => {
+      if (!userPhoto) return;
+      e.preventDefault();
+
+      if (e.touches.length === 1 && isDragging) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleFactor = CANVAS_WIDTH / rect.width;
+
+        const dx = (e.touches[0].clientX - startX) * scaleFactor;
+        const dy = (e.touches[0].clientY - startY) * scaleFactor;
+        photoX += dx;
+        photoY += dy;
+
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        render();
+      } else if (e.touches.length === 2) {
+        const dist = getTouchDist(e.touches);
+        if (initialTouchDist > 0) {
+          const factor = dist / initialTouchDist;
+          photoScale = Math.min(3.0, Math.max(0.3, initialScaleOnPinch * factor));
+          syncUI();
+          render();
+        }
+      }
+    }, { passive: false });
+
+    wrapper.addEventListener('touchend', (e) => {
+      if (e.touches.length === 0) {
+        isDragging = false;
+        initialTouchDist = 0;
+      } else if (e.touches.length === 1) {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        isDragging = true;
+      }
+    });
+
+    function getTouchDist(touches) {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // DOWNLOAD TWIBBON
+    function downloadTwibbon() {
+      if (!userPhoto) {
+        fileInput.click();
+        return;
+      }
+
+      // Pastikan render dalam resolusi penuh
+      render();
+
+      const link = document.createElement('a');
+      link.download = 'twibbon-fintrac-2026.png';
+      link.href = canvas.toDataURL('image/png', 1.0);
+      link.click();
+      showToast("Twibbon HD berhasil diunduh!");
+    }
+  </script>
+</body>
+</html>
