@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Editor Twibbon FINTRAC 2026 - Financial Trading Competition</title>
+  <title>Editor Twibbon & Caption FINTRAC 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-dark: #070a14;
-      --card-bg: rgba(16, 23, 42, 0.75);
+      --card-bg: rgba(16, 23, 42, 0.8);
       --card-border: rgba(255, 255, 255, 0.1);
       --primary-cyan: #00f2fe;
       --primary-magenta: #f538a0;
+      --ig-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
       --accent-gold: #ffb703;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
@@ -32,22 +33,22 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg-dark);
       background-image: 
-        radial-gradient(circle at 15% 20%, rgba(245, 56, 160, 0.12) 0%, transparent 40%),
-        radial-gradient(circle at 85% 80%, rgba(0, 242, 254, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 15% 15%, rgba(245, 56, 160, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.15) 0%, transparent 40%),
         linear-gradient(180deg, #070a14 0%, #0d1322 100%);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 16px 12px 32px;
+      padding: 16px 12px 48px;
     }
 
     /* HEADER */
     header {
       text-align: center;
       margin-bottom: 20px;
-      max-width: 600px;
+      max-width: 620px;
       width: 100%;
     }
 
@@ -55,32 +56,32 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 14px;
+      padding: 5px 16px;
       background: rgba(0, 242, 254, 0.1);
-      border: 1px solid rgba(0, 242, 254, 0.3);
+      border: 1px solid rgba(0, 242, 254, 0.35);
       border-radius: 999px;
       color: var(--primary-cyan);
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       font-weight: 700;
       letter-spacing: 1px;
       text-transform: uppercase;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     h1 {
-      font-size: 1.6rem;
+      font-size: 1.7rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #ffffff 30%, var(--primary-cyan) 70%, var(--primary-magenta) 100%);
+      background: linear-gradient(135deg, #ffffff 25%, var(--primary-cyan) 70%, var(--primary-magenta) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       line-height: 1.25;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     p.subtitle {
       font-size: 0.88rem;
       color: var(--text-muted);
-      line-height: 1.4;
+      line-height: 1.5;
     }
 
     /* MAIN CONTAINER */
@@ -88,7 +89,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 24px;
       width: 100%;
       max-width: 1050px;
     }
@@ -102,14 +103,14 @@
       }
     }
 
-    /* PREVIEW CANVAS WRAPPER */
+    /* LEFT: PREVIEW CANVAS CARD */
     .preview-card {
       background: var(--card-bg);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 16px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -125,7 +126,7 @@
       background: #000;
       border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
       cursor: grab;
       touch-action: none;
       display: flex;
@@ -144,7 +145,7 @@
       display: block;
     }
 
-    /* EMPTY STATE OVERLAY */
+    /* EMPTY PLACEHOLDER */
     .empty-placeholder {
       position: absolute;
       top: 0;
@@ -156,7 +157,7 @@
       align-items: center;
       justify-content: center;
       background: rgba(7, 10, 20, 0.85);
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(5px);
       padding: 24px;
       text-align: center;
       pointer-events: none;
@@ -170,8 +171,8 @@
     }
 
     .upload-icon-pulse {
-      width: 64px;
-      height: 64px;
+      width: 68px;
+      height: 68px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--primary-cyan), var(--primary-magenta));
       display: flex;
@@ -179,27 +180,27 @@
       justify-content: center;
       margin-bottom: 14px;
       box-shadow: var(--glow-cyan);
-      animation: pulse 2s infinite ease-in-out;
+      animation: pulse 2.2s infinite ease-in-out;
     }
 
     @keyframes pulse {
       0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
-      50% { transform: scale(1.08); box-shadow: 0 0 25px rgba(245, 56, 160, 0.6); }
+      50% { transform: scale(1.08); box-shadow: 0 0 28px rgba(245, 56, 160, 0.6); }
     }
 
     .empty-placeholder h3 {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 700;
       margin-bottom: 6px;
     }
 
     .empty-placeholder p {
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       color: var(--text-muted);
     }
 
     .canvas-hint {
-      margin-top: 10px;
+      margin-top: 12px;
       font-size: 0.78rem;
       color: var(--text-muted);
       text-align: center;
@@ -208,7 +209,7 @@
       gap: 6px;
     }
 
-    /* CONTROLS PANEL */
+    /* RIGHT: CONTROLS & CAPTION */
     .controls-card {
       background: var(--card-bg);
       backdrop-filter: blur(16px);
@@ -224,12 +225,20 @@
       box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
     }
 
-    /* UPLOAD BUTTON */
-    .btn-upload-wrap {
-      position: relative;
-      width: 100%;
+    /* SECTION TABS / HEADERS */
+    .section-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--primary-cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: -4px;
     }
 
+    /* UPLOAD BUTTON */
     #fileInput {
       display: none;
     }
@@ -240,12 +249,12 @@
       justify-content: center;
       gap: 10px;
       width: 100%;
-      padding: 14px 20px;
+      padding: 13px 20px;
       background: linear-gradient(135deg, #1e293b, #0f172a);
       border: 1.5px dashed rgba(0, 242, 254, 0.5);
-      border-radius: 14px;
+      border-radius: 12px;
       color: var(--text-main);
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.25s ease;
@@ -254,49 +263,45 @@
     .btn-upload:hover {
       border-color: var(--primary-cyan);
       background: rgba(0, 242, 254, 0.08);
-      transform: translateY(-1px);
     }
 
-    /* CONTROL GROUPS */
-    .control-group {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 14px;
-      padding: 14px;
+    /* PHOTO ADJUSTMENT CONTROLS */
+    .controls-grid {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-    }
-
-    .group-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.84rem;
-      font-weight: 600;
-      color: #cbd5e1;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      padding: 12px 14px;
     }
 
     .slider-row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+    }
+
+    .slider-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      width: 60px;
     }
 
     .slider-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.1);
       color: white;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: background 0.2s;
     }
 
     .slider-btn:hover {
@@ -306,7 +311,7 @@
 
     input[type="range"] {
       flex: 1;
-      height: 6px;
+      height: 5px;
       border-radius: 3px;
       background: #334155;
       outline: none;
@@ -315,99 +320,210 @@
 
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       background: var(--primary-cyan);
-      box-shadow: 0 0 10px var(--primary-cyan);
+      box-shadow: 0 0 8px var(--primary-cyan);
       cursor: pointer;
-      transition: transform 0.1s;
-    }
-
-    input[type="range"]::-webkit-slider-thumb:hover {
-      transform: scale(1.2);
     }
 
     .val-display {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       color: var(--primary-cyan);
       font-family: monospace;
-      width: 42px;
+      width: 38px;
       text-align: right;
     }
 
-    /* ACTION BUTTONS GRID */
-    .actions-grid {
+    /* ACTION BUTTONS */
+    .actions-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
     }
 
-    .btn-action {
+    .btn-small {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 10px;
+      gap: 6px;
+      padding: 8px 10px;
+      border-radius: 8px;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       color: #e2e8f0;
-      font-size: 0.82rem;
+      font-size: 0.76rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
     }
 
-    .btn-action:hover {
+    .btn-small:hover {
       background: rgba(255, 255, 255, 0.12);
       border-color: rgba(255, 255, 255, 0.25);
     }
 
-    /* DOWNLOAD CTA */
-    .btn-download {
+    /* DATA FORM CARD */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .input-row {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .input-row label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .input-text {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(2, 6, 23, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-text:focus {
+      border-color: var(--primary-cyan);
+      box-shadow: 0 0 0 2px rgba(0, 242, 254, 0.25);
+    }
+
+    /* CAPTION BOX */
+    .caption-preview-box {
+      position: relative;
+      background: rgba(2, 6, 23, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 12px;
+      max-height: 140px;
+      overflow-y: auto;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
+
+    .caption-preview-box::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .caption-preview-box::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 3px;
+    }
+
+    .highlight-data {
+      color: var(--primary-cyan);
+      font-weight: 700;
+      background: rgba(0, 242, 254, 0.12);
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+
+    /* COPY CAPTION BUTTON */
+    .btn-copy {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 11px 16px;
+      background: rgba(0, 242, 254, 0.12);
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      border-radius: 10px;
+      color: var(--primary-cyan);
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy:hover {
+      background: rgba(0, 242, 254, 0.22);
+      border-color: var(--primary-cyan);
+    }
+
+    /* INSTAGRAM CTA & DOWNLOAD */
+    .share-buttons-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .btn-ig-share {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
       width: 100%;
-      padding: 16px 24px;
-      background: linear-gradient(135deg, var(--primary-cyan), var(--primary-magenta));
+      padding: 15px 20px;
+      background: var(--ig-gradient);
       border: none;
-      border-radius: 14px;
-      color: #070a14;
-      font-size: 1rem;
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 0.96rem;
       font-weight: 800;
-      letter-spacing: 0.5px;
       cursor: pointer;
-      box-shadow: var(--glow-cyan);
+      box-shadow: 0 4px 20px rgba(220, 39, 67, 0.4);
       transition: all 0.25s ease;
-      margin-top: 6px;
     }
 
-    .btn-download:hover {
+    .btn-ig-share:hover {
       transform: translateY(-2px);
-      box-shadow: 0 0 25px rgba(245, 56, 160, 0.6);
+      box-shadow: 0 6px 25px rgba(220, 39, 67, 0.6);
     }
 
-    .btn-download:active {
-      transform: translateY(0);
+    .btn-download-hd {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      color: #f8fafc;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-download-hd:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
     }
 
     /* FOOTER */
     footer {
-      margin-top: 32px;
+      margin-top: 36px;
       text-align: center;
       font-size: 0.78rem;
       color: var(--text-muted);
+      line-height: 1.6;
     }
 
-    footer a {
-      color: var(--primary-cyan);
-      text-decoration: none;
-    }
-
-    /* TOAST NOTIFICATION */
+    /* TOAST */
     .toast {
       position: fixed;
       bottom: 24px;
@@ -442,34 +558,56 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
       FINTRAC 2026
     </div>
-    <h1>Twibbon Photo Editor</h1>
-    <p class="subtitle">Pasang fotomu ke dalam frame resmi Financial Trading Competition dengan resolusi tinggi (2048 x 2560 px).</p>
+    <h1>Twibbon & Instagram Caption Generator</h1>
+    <p class="subtitle">Pasang fotomu, masukkan nama & universitas, salin caption resmi, dan bagikan langsung ke Instagram!</p>
   </header>
 
   <div class="app-container">
     
-    <!-- PREVIEW AREA -->
+    <!-- LEFT: PREVIEW CANVAS -->
     <div class="preview-card">
       <div class="canvas-wrapper" id="canvasWrapper">
         <canvas id="twibbonCanvas" width="2048" height="2560"></canvas>
         <div class="empty-placeholder" id="emptyPlaceholder">
           <div class="upload-icon-pulse">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#070a14" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#070a14" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
           </div>
           <h3>Pilih atau Tarik Foto ke Sini</h3>
-          <p>Klik tombol upload untuk memasukkan fotomu</p>
+          <p>Klik tombol upload foto untuk memulai</p>
         </div>
       </div>
       <div class="canvas-hint">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-        Geser foto langsung di layar atau cubit untuk zoom
+        Geser foto langsung dengan mouse/jari atau cubit untuk zoom
       </div>
     </div>
 
-    <!-- CONTROLS AREA -->
+    <!-- RIGHT: CONTROLS & FORM -->
     <div class="controls-card">
       
-      <!-- UPLOAD -->
+      <!-- 1. DATA PESERTA -->
+      <div class="section-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        1. Biodata Peserta
+      </div>
+
+      <div class="form-group">
+        <div class="input-row">
+          <label for="inputNama">Nama Lengkap</label>
+          <input type="text" id="inputNama" class="input-text" placeholder="Masukkan nama kamu..." value="">
+        </div>
+        <div class="input-row">
+          <label for="inputUniv">Asal Universitas / Kampus</label>
+          <input type="text" id="inputUniv" class="input-text" placeholder="Masukkan universitas kamu..." value="">
+        </div>
+      </div>
+
+      <!-- 2. ATUR FOTO -->
+      <div class="section-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+        2. Atur Foto Twibbon
+      </div>
+
       <div class="btn-upload-wrap">
         <input type="file" id="fileInput" accept="image/*">
         <button class="btn-upload" onclick="document.getElementById('fileInput').click()">
@@ -478,72 +616,81 @@
         </button>
       </div>
 
-      <!-- ZOOM CONTROL -->
-      <div class="control-group">
-        <div class="group-header">
-          <span>Perbesar / Zoom</span>
-          <span class="val-display" id="zoomVal">1.0x</span>
-        </div>
+      <div class="controls-grid">
         <div class="slider-row">
+          <span class="slider-label">Zoom</span>
           <button class="slider-btn" onclick="stepZoom(-0.1)">-</button>
           <input type="range" id="zoomSlider" min="0.3" max="3.0" step="0.01" value="1.0">
           <button class="slider-btn" onclick="stepZoom(0.1)">+</button>
+          <span class="val-display" id="zoomVal">1.0x</span>
         </div>
-      </div>
 
-      <!-- ROTATION CONTROL -->
-      <div class="control-group">
-        <div class="group-header">
-          <span>Putar / Rotasi</span>
-          <span class="val-display" id="rotVal">0°</span>
-        </div>
         <div class="slider-row">
+          <span class="slider-label">Rotasi</span>
           <button class="slider-btn" onclick="stepRot(-5)">↺</button>
           <input type="range" id="rotSlider" min="-180" max="180" step="1" value="0">
           <button class="slider-btn" onclick="stepRot(5)">↻</button>
+          <span class="val-display" id="rotVal">0°</span>
+        </div>
+
+        <div class="actions-row">
+          <button class="btn-small" onclick="flipPhoto()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line></svg>
+            Cermin
+          </button>
+          <button class="btn-small" onclick="rotate90()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+            Putar 90°
+          </button>
+          <button class="btn-small" onclick="fitToCutout()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle></svg>
+            Pusatkan
+          </button>
         </div>
       </div>
 
-      <!-- QUICK ACTIONS -->
-      <div class="actions-grid">
-        <button class="btn-action" onclick="flipPhoto()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
-          Cermin / Flip
-        </button>
-        <button class="btn-action" onclick="rotate90()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-          Putar 90°
-        </button>
-        <button class="btn-action" onclick="fitToCutout()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle></svg>
-          Pusatkan Foto
-        </button>
-        <button class="btn-action" onclick="resetAll()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
-          Reset Posisi
-        </button>
+      <!-- 3. CAPTION PREVIEW -->
+      <div class="section-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        3. Caption Resmi Instagram
       </div>
 
-      <!-- DOWNLOAD BUTTON -->
-      <button class="btn-download" onclick="downloadTwibbon()">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#070a14" stroke-width="2.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-        Unduh Twibbon HD
+      <div class="caption-preview-box" id="captionPreview"></div>
+
+      <button class="btn-copy" onclick="copyCaption(true)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        Salin Teks Caption
       </button>
+
+      <!-- 4. SHARE & DOWNLOAD -->
+      <div class="share-buttons-container">
+        <!-- TOMBOL AUTO SHARE IG -->
+        <button class="btn-ig-share" onclick="shareToInstagram()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          Posting / Bagikan ke Instagram
+        </button>
+
+        <!-- UNDUH TWIBBON HD -->
+        <button class="btn-download-hd" onclick="downloadTwibbon(true)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Unduh File Twibbon HD (2048 x 2560 px)
+        </button>
+      </div>
 
     </div>
 
   </div>
 
   <footer>
-    FINTRAC 2026 &bull; Capital Market Study Club (KSPM) Universitas Harkat Negeri
+    FINTRAC 2026 &bull; Capital Market Study Club (KSPM) Universitas Harkat Negeri<br>
+    Bekerjasama dengan OJK, BEI, IDClear, dan KSEI.
   </footer>
 
-  <div class="toast" id="toastMessage">Twibbon berhasil diunduh!</div>
+  <div class="toast" id="toastMessage">Caption berhasil disalin!</div>
 
   <script>
     const CANVAS_WIDTH = 2048;
     const CANVAS_HEIGHT = 2560;
-    // Pusat lubang lingkaran frame FINTRAC 2026
     const CUTOUT_X = 1010;
     const CUTOUT_Y = 1316;
     const CUTOUT_RADIUS = 618;
@@ -554,6 +701,10 @@
     const fileInput = document.getElementById('fileInput');
     const placeholder = document.getElementById('emptyPlaceholder');
     const toast = document.getElementById('toastMessage');
+
+    const inputNama = document.getElementById('inputNama');
+    const inputUniv = document.getElementById('inputUniv');
+    const captionPreview = document.getElementById('captionPreview');
 
     const zoomSlider = document.getElementById('zoomSlider');
     const zoomVal = document.getElementById('zoomVal');
@@ -567,17 +718,15 @@
     let photoX = CUTOUT_X;
     let photoY = CUTOUT_Y;
     let photoScale = 1.0;
-    let photoRotation = 0; // derajat
+    let photoRotation = 0;
     let isFlipped = false;
 
-    // Drag & Touch interaction
     let isDragging = false;
     let startX = 0;
     let startY = 0;
     let initialTouchDist = 0;
     let initialScaleOnPinch = 1.0;
 
-    // Inisialisasi frame
     frameImage.onload = () => {
       render();
     };
@@ -585,14 +734,115 @@
     function showToast(msg) {
       toast.innerText = msg;
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2500);
+      setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // RENDER UTAMA
+    // CAPTION GENERATOR
+    function getCleanNama() {
+      const val = inputNama.value.trim();
+      return val ? val : '[Nama]';
+    }
+
+    function getCleanUniv() {
+      const val = inputUniv.value.trim();
+      return val ? val : '[Universitas]';
+    }
+
+    function generateCaptionText() {
+      const nama = getCleanNama();
+      const univ = getCleanUniv();
+
+      return `I’M READY FOR FINTRAC 2026!
+
+Halo, Sobat FINTRAC!
+Saya ${nama}, dari ${univ}, siap berpartisipasi dan ikut meramaikan FINTRAC 2026 – Financial Trading Competition!
+
+Dalam rangka menyambut Bulan Inklusi Keuangan 2026, OJK dan BEI bersama KSPM Universitas Harkat Negeri menghadirkan FINTRAC 2026 dengan tema:
+“Empowering Young Minds Through Smart Trading”
+
+Yuk, tambah pengalaman, asah strategi, dan kenalan lebih dekat dengan dunia pasar modal lewat FINTRAC 2026!
+
+Sudah siap ikut meramaikan?
+Jangan lupa ajak teman dan share Twibbon-mu juga, ya!
+
+More info:
+@ojk_tegal
+@idx_semarang
+@kspm.harkatnegeri
+
+#FINTRAC2026 #BulanInklusiKeuangan #FinancialTradingCompetition #PasarModal #KSPM`;
+    }
+
+    function updateCaptionUI() {
+      const nama = inputNama.value.trim();
+      const univ = inputUniv.value.trim();
+
+      const namaDisplay = nama ? `<span class="highlight-data">${escapeHtml(nama)}</span>` : `<span style="color:#f538a0;">[Nama]</span>`;
+      const univDisplay = univ ? `<span class="highlight-data">${escapeHtml(univ)}</span>` : `<span style="color:#f538a0;">[Universitas]</span>`;
+
+      captionPreview.innerHTML = `<b>I’M READY FOR FINTRAC 2026!</b>
+
+Halo, Sobat FINTRAC!
+Saya ${namaDisplay}, dari ${univDisplay}, siap berpartisipasi dan ikut meramaikan FINTRAC 2026 – Financial Trading Competition!
+
+Dalam rangka menyambut Bulan Inklusi Keuangan 2026, OJK dan BEI bersama KSPM Universitas Harkat Negeri menghadirkan FINTRAC 2026 dengan tema:
+<i>“Empowering Young Minds Through Smart Trading”</i>
+
+Yuk, tambah pengalaman, asah strategi, dan kenalan lebih dekat dengan dunia pasar modal lewat FINTRAC 2026!
+
+Sudah siap ikut meramaikan?
+Jangan lupa ajak teman dan share Twibbon-mu juga, ya!
+
+More info:
+@ojk_tegal
+@idx_semarang
+@kspm.harkatnegeri
+
+#FINTRAC2026 #BulanInklusiKeuangan #FinancialTradingCompetition #PasarModal #KSPM`;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.innerText = text;
+      return div.innerHTML;
+    }
+
+    inputNama.addEventListener('input', updateCaptionUI);
+    inputUniv.addEventListener('input', updateCaptionUI);
+    updateCaptionUI();
+
+    // SALIN CAPTION
+    function copyCaption(showToastAlert = true) {
+      const text = generateCaptionText();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          if (showToastAlert) showToast("Teks caption berhasil disalin!");
+        }).catch(() => fallbackCopy(text, showToastAlert));
+      } else {
+        fallbackCopy(text, showToastAlert);
+      }
+    }
+
+    function fallbackCopy(text, showToastAlert) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        if (showToastAlert) showToast("Teks caption berhasil disalin!");
+      } catch (e) {
+        if (showToastAlert) showToast("Silakan salin teks caption secara manual.");
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // RENDER CANVAS
     function render() {
       ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // 1. Gambar foto pengguna (jika ada) di bawah frame
       if (userPhoto) {
         ctx.save();
         ctx.translate(photoX, photoY);
@@ -602,13 +852,12 @@
         ctx.restore();
       }
 
-      // 2. Gambar frame overlay transparan di atas foto
       if (frameImage.complete && frameImage.naturalWidth > 0) {
         ctx.drawImage(frameImage, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
       }
     }
 
-    // UPLOAD HANDLER
+    // UPLOAD PHOTO
     fileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -630,7 +879,7 @@
       reader.readAsDataURL(file);
     }
 
-    // DRAG AND DROP KE WRAPPER
+    // DRAG AND DROP FILE KE WRAPPER
     wrapper.addEventListener('dragover', (e) => {
       e.preventDefault();
       wrapper.style.borderColor = 'var(--primary-cyan)';
@@ -657,7 +906,6 @@
       photoRotation = 0;
       isFlipped = false;
 
-      // Hitung skala agar pas menutupi lubang lingkaran (diameter ~1236px)
       const targetSize = CUTOUT_RADIUS * 2.15;
       const scaleW = targetSize / userPhoto.width;
       const scaleH = targetSize / userPhoto.height;
@@ -665,10 +913,6 @@
 
       syncUI();
       render();
-    }
-
-    function resetAll() {
-      fitToCutout();
     }
 
     function syncUI() {
@@ -812,21 +1056,81 @@
       return Math.sqrt(dx * dx + dy * dy);
     }
 
-    // DOWNLOAD TWIBBON
-    function downloadTwibbon() {
+    // UNDUH TWIBBON HD
+    function downloadTwibbon(triggerAlert = true) {
       if (!userPhoto) {
         fileInput.click();
         return;
       }
 
-      // Pastikan render dalam resolusi penuh
       render();
 
       const link = document.createElement('a');
       link.download = 'twibbon-fintrac-2026.png';
       link.href = canvas.toDataURL('image/png', 1.0);
       link.click();
-      showToast("Twibbon HD berhasil diunduh!");
+      if (triggerAlert) {
+        showToast("Twibbon HD berhasil diunduh!");
+      }
+    }
+
+    // SHARE TO INSTAGRAM WORKFLOW
+    async function shareToInstagram() {
+      if (!userPhoto) {
+        showToast("Upload foto terlebih dahulu!");
+        fileInput.click();
+        return;
+      }
+
+      // 1. Salin caption secara otomatis ke clipboard
+      copyCaption(false);
+
+      // 2. Render & proses gambar
+      render();
+
+      // Cek apakah browser mendukung Web Share API dengan file gambar
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          fallbackInstagramFlow();
+          return;
+        }
+
+        const file = new File([blob], 'twibbon-fintrac-2026.png', { type: 'image/png' });
+        const captionText = generateCaptionText();
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({
+              files: [file],
+              title: "I'M READY FOR FINTRAC 2026!",
+              text: captionText
+            });
+            showToast("Caption tersalin & siap diposting ke IG!");
+          } catch (err) {
+            if (err.name !== 'AbortError') {
+              fallbackInstagramFlow();
+            }
+          }
+        } else {
+          fallbackInstagramFlow();
+        }
+      }, 'image/png');
+    }
+
+    function fallbackInstagramFlow() {
+      // Unduh gambar ke HP/laptop
+      downloadTwibbon(false);
+      showToast("Caption tersalin & foto diunduh! Membuka Instagram...");
+
+      // Coba buka aplikasi Instagram via deep-link
+      setTimeout(() => {
+        // Deep-link aplikasi Instagram
+        window.location.href = "instagram://camera";
+        // Fallback jika dibuka di browser PC/laptop
+        setTimeout(() => {
+          window.open("https://www.instagram.com/", "_blank");
+        }, 1200);
+      }, 600);
     }
   </script>
 </body>
